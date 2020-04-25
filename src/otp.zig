@@ -19,7 +19,7 @@ pub const Hotp = struct {
     /// generateCode creates a new code with a length of `digits`.
     /// The counter needs to be synchronized between the client and server.
     /// It is up to the implementation to handle the synchronization, this library does not facilitate it.
-    pub fn generateCode(self: Hotp, counter: u64, digits: u8) []u8 {
+    pub fn generateCode(self: Hotp, counter: u64, digits: u8) ![]u8 {
         return buildCode(self.secret, counter, digits, crypto.Sha1);
     }
 };
@@ -39,11 +39,11 @@ pub const Totp = struct {
 
     /// generateCode creates a new code with a length of `digits`.
     /// `timestamp` can be generated using `std.milliTimestamp`.
-    pub fn generateCode(self: Totp, timestamp: u64, digits: u8, algorithm: crypto.Hash) []u8 {}
+    pub fn generateCode(self: Totp, timestamp: u64, digits: u8, algorithm: crypto.Hash) ![]u8 {}
 };
 
 /// generateCode creates the actual code given the provided parameters from the `Hotp` & `Totp` structs.
-fn buildCode(secret: []const u8, counter: u64, digits: u8, algorithm: var) []u8 {
+fn buildCode(secret: []const u8, counter: u64, digits: u8, algorithm: var) ![]u8 {
     const hmac = crypto.HmacSha1;
     var out: [hmac.mac_length]u8 = undefined;
 
@@ -60,7 +60,8 @@ fn buildCode(secret: []const u8, counter: u64, digits: u8, algorithm: var) []u8 
         @as(u32, (out[offset + 3] & 0xff));
 
     // add padding to the left incase the first number is a 0
-    const code = bin_code & std.math.pow(u32, 10, digits);
+    const code = bin_code % std.math.pow(u32, 10, digits);
+
     return formatCode(code, digits);
 }
 
@@ -73,10 +74,17 @@ fn intToSlice(val: u64) []const u8 {
 
 /// formatCode will try to parse the integer and return a string.
 /// An extra `0` will be added to the left to match the given length.
-fn formatCode(val: u64, comptime length: u8) []u8 {
-    var buf: [length]u8 = undefined;
+fn formatCode(val: u64, length: u8) ![]u8 {
+    var buf: [8]u8 = undefined;
     var fbs = std.io.fixedBufferStream(&buf);
-    try formatIntValue(val, "", FormatOptions{ .width = length, .fill = '0' }, fbs.outStream());
+    try std.fmt.formatIntValue(val, "", std.fmt.FormatOptions{ .width = length, .fill = '0' }, fbs.outStream());
 
     return fbs.getWritten();
+}
+
+test "HOTP code generation" {
+    const hotp = Hotp.init("secretkey");
+    const code = try hotp.generateCode(0, 6);
+
+    std.testing.expectEqualSlices(u8, "049381", code);
 }
