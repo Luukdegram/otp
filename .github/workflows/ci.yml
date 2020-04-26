@@ -1,4 +1,4 @@
-name: Test & build
+name: Test
 on: [push, pull_request]
 
 jobs:
@@ -10,9 +10,3 @@ jobs:
           with:
             version: 0.6.0
         - run: zig build test
-    example:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - uses: goto-bus-stop/setup-zig@v1
-        - run: zig build example
