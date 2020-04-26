@@ -86,8 +86,11 @@ fn buildCode(secret: []const u8, counter: u64, digits: u8, algorithm: Algorithm)
             buf = buffer[0..buffer.len];
         },
         .Sha256 => {
-            var buffer: [crypto.HmacSha256.mac_length]u8 = undefined;
-            crypto.HmacSha256.create(buf[0..], intToSlice(counter), secret[0..]);
+            const hmac = crypto.HmacSha256;
+            var buffer: [hmac.mac_length]u8 = undefined;
+            var ctx = hmac.init(secret);
+            ctx.update(intToSlice(counter));
+            ctx.final(buffer[0..]);
             buf = buffer[0..buffer.len];
         },
         else => {
