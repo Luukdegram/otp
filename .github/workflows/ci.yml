@@ -10,9 +10,9 @@ jobs:
       steps:
         - uses: actions/checkout@v2
         - uses: goto-bus-stop/setup-zig@v1
-        - run: zig build test
           with:
             version: 0.0.6
+        - run: zig build test
     lint:
       runs-on: ubuntu-latest
       steps:
