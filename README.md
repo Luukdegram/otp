@@ -12,7 +12,7 @@ OTP is a one-time-password library supporting both HOTP and TOTP according to [`
 Currently only the generation of codes is supported. Verification has to be done by the implementation.
 
 **note:**
-This library's primary goal was to get more familair with the Zig lange.
+This library's primary goal was to get more familair with the Zig language. I wouldn't recommend using this for serious purposes.
 
 ## Example
 ```zig
