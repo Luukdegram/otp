@@ -1,6 +1,5 @@
 const builtin = @import("builtin");
 const std = @import("std");
-const warn = std.debug.warn;
 const crypto = std.crypto;
 
 /// Possible errors when generating a code
@@ -106,7 +105,6 @@ fn buildCode(secret: []const u8, counter: u64, digits: u8, algorithm: Algorithm)
 
     // add padding to the left incase the first number is a 0
     const code = bin_code % std.math.pow(u32, 10, digits);
-    warn("otp code: {}\n", .{code});
     return formatCode(code, digits);
 }
 
