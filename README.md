@@ -6,6 +6,7 @@
 -->
 
 # OTP
+![Test](https://github.com/Luukdegram/otp/workflows/Test/badge.svg)
 
 OTP is a one-time-password library supporting both HOTP and TOTP according to [`RFC 4226`](https://tools.ietf.org/html/rfc4226) and [`RFC 6238`](https://tools.ietf.org/html/rfc6238), written in [Zig](https://ziglang.org) version *0.6.0*.
 
