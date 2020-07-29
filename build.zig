@@ -13,10 +13,14 @@ pub fn build(b: *Builder) void {
     const test_step = b.step("test", "Run library tests");
     test_step.dependOn(&main_tests.step);
 
-    const example_step = b.step("example", "Build example");
     const example = b.addExecutable("example", "example" ++ std.fs.path.sep_str ++ "main.zig");
     example.addPackagePath("otp", "src/otp.zig");
     example.setBuildMode(mode);
     example.install();
-    example_step.dependOn(&example.step);
+
+    const run_example = example.run();
+    run_example.step.dependOn(b.getInstallStep());
+
+    const example_step = b.step("example", "Run example");
+    example_step.dependOn(&run_example.step);
 }

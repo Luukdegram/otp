@@ -61,9 +61,9 @@ pub const Totp = struct {
 
     /// generateCode creates a new code with a length of `digits`.
     /// `timestamp` can be generated using `std.milliTimestamp`.
-    pub fn generateCode(self: Self, secret: []const u8, time: u64) ![]u8 {
+    pub fn generateCode(self: Self, secret: []const u8, time: i64) ![]u8 {
         // Convert to floats for higher precision
-        const counter = @intToFloat(f64, time) / @intToFloat(f64, self.opts.time_step);
+        const counter = @intToFloat(f64, @bitCast(u64, time)) / @intToFloat(f64, self.opts.time_step);
         return buildCode(secret, @floatToInt(u64, std.math.floor(counter)), self.opts.digits, self.opts.algorithm);
     }
 };

@@ -7,12 +7,13 @@
 
 # OTP
 
-OTP is a one-time-password library supporting both HOTP and TOTP according to [`RFC 4226`](https://tools.ietf.org/html/rfc4226) and [`RFC 6238`](https://tools.ietf.org/html/rfc6238), written in [Zig](https://ziglang.org) version *0.6.0*.
+OTP is a one-time-password library supporting both HOTP and TOTP according to [`RFC 4226`](https://tools.ietf.org/html/rfc4226) and [`RFC 6238`](https://tools.ietf.org/html/rfc6238).
 
 Currently only the generation of codes is supported. Verification has to be done by the implementation.
 
-**note:**
-This library's primary goal was to get more familair with the Zig lange.
+**note**
+
+This library's primary goal was to get more familair with the Zig language.
 
 ## Example
 ```zig
@@ -30,6 +31,6 @@ You can use the `build.zig` file as reference point on how to link the library t
 
 ### Tests
 You can run the tests using the following command
-```
-zig build test
+```shell
+zig build
 ```
